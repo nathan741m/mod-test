@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoyalBot</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(135deg,#000,#2a004d,#000);
+  color:white;
+}
+
+.page{display:none;padding:40px;}
+.active{display:block;}
+
+input{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:8px;
+  border:none;
+}
+button{
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header style="display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:1px solid #444;">
+  <h1 style="color:#c084fc;">👑 RoyalBot</h1>
+  <div id="topbar"></div>
+</header>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <h2 style="font-size:50px;text-align:center;">
+    Faites régner l'ordre
+  </h2>
+
+  <p style="text-align:center;color:#aaa;">
+    Bot anti-raid Discord
+  </p>
+
+  <div style="text-align:center;margin-top:20px;">
+    <button onclick="go('login')" style="background:#7c3aed;padding:12px 20px;border-radius:10px;color:white;">
+      Connexion
+    </button>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="page">
+  <h2>Connexion</h2>
+
+  <input id="user" placeholder="Pseudo">
+  <input id="pass" placeholder="Mot de passe" type="password">
+
+  <button onclick="login()" style="background:#7c3aed;padding:12px 20px;border-radius:10px;color:white;width:100%;">
+    Se connecter
+  </button>
+</div>
+
+<!-- DASH -->
+<div id="dashboard" class="page">
+  <h2 id="dashUser"></h2>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="page">
+  <h2 id="profileName"></h2>
+
+  <button onclick="logout()" style="background:red;padding:10px;border-radius:8px;color:white;">
+    Déconnexion
+  </button>
+</div>
+
+<script>
+let users = JSON.parse(localStorage.getItem("users") || '[{"username":"admin","password":"ADMIN1234"}]');
+let current = null;
+
+function save(){
+  localStorage.setItem("users", JSON.stringify(users));
+  localStorage.setItem("current", JSON.stringify(current));
+}
+
+function go(page){
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
+  updateTop();
+}
+
+function login(){
+  let u = document.getElementById("user").value;
+  let p = document.getElementById("pass").value;
+
+  let user = users.find(x => x.username === u && x.password === p);
+
+  if(!user){
+    alert("Erreur login");
+    return;
+  }
+
+  current = user;
+  save();
+
+  document.getElementById("dashUser").innerText = "Bienvenue " + u;
+  document.getElementById("profileName").innerText = u;
+
+  go("dashboard");
+}
+
+function logout(){
+  current = null;
+  save();
+  go("home");
+}
+
+function updateTop(){
+  let topbar = document.getElementById("topbar");
+
+  if(current){
+    topbar.innerHTML = `<button onclick="go('profile')" style="background:#4f46e5;padding:8px 12px;border-radius:20px;color:white;">👤 ${current.username}</button>`;
+  } else {
+    topbar.innerHTML = `<button onclick="go('login')" style="border:1px solid #aaa;padding:8px 12px;border-radius:20px;color:white;">Connexion</button>`;
+  }
+}
+
+updateTop();
+</script>
+
+</body>
+</html>
