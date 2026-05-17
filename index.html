@@ -3,136 +3,178 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RoyalBot</title>
+<title>RoyalBot - Anti Raid Discord</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:linear-gradient(135deg,#000,#2a004d,#000);
-  color:white;
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: radial-gradient(circle at top, #12001f, #000000);
+  overflow-x: hidden;
 }
 
-.page{display:none;padding:40px;}
-.active{display:block;}
-
-input{
-  width:100%;
-  padding:10px;
-  margin:8px 0;
-  border-radius:8px;
-  border:none;
+.glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(168,85,247,0.25), transparent 70%);
+  filter: blur(80px);
+  top: -200px;
+  left: -200px;
+  z-index: 0;
 }
-button{
-  cursor:pointer;
+
+.glow2 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(236,72,153,0.25), transparent 70%);
+  filter: blur(80px);
+  bottom: -200px;
+  right: -200px;
+  z-index: 0;
+}
+
+.card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(168,85,247,0.2);
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(168,85,247,0.6);
 }
 </style>
 </head>
 
-<body>
+<body class="text-white">
 
-<header style="display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:1px solid #444;">
-  <h1 style="color:#c084fc;">👑 RoyalBot</h1>
-  <div id="topbar"></div>
-</header>
+<div class="glow"></div>
+<div class="glow2"></div>
 
-<!-- HOME -->
-<div id="home" class="page active">
-  <h2 style="font-size:50px;text-align:center;">
-    Faites régner l'ordre
-  </h2>
+<!-- HEADER -->
+<header class="flex justify-between items-center px-8 py-6 relative z-10">
 
-  <p style="text-align:center;color:#aaa;">
-    Bot anti-raid Discord
-  </p>
+  <h1 class="text-2xl font-bold text-purple-400">👑 RoyalBot</h1>
 
-  <div style="text-align:center;margin-top:20px;">
-    <button onclick="go('login')" style="background:#7c3aed;padding:12px 20px;border-radius:10px;color:white;">
+  <div id="authArea" class="flex items-center gap-3">
+
+    <!-- bouton connexion -->
+    <button id="loginBtn"
+      class="bg-indigo-600 px-4 py-2 rounded-xl hover:bg-indigo-500 transition">
       Connexion
     </button>
+
+    <!-- profil utilisateur -->
+    <div id="userBox" class="hidden items-center gap-3 bg-white/10 px-3 py-2 rounded-xl">
+
+      <img id="avatar"
+           class="w-10 h-10 rounded-full"
+           src="https://cdn.discordapp.com/embed/avatars/0.png">
+
+      <div class="flex flex-col leading-tight">
+        <span id="username" class="font-bold">User</span>
+        <span class="text-xs text-green-400 font-bold">🟢 Guest</span>
+      </div>
+
+    </div>
+
   </div>
-</div>
+</header>
 
-<!-- LOGIN -->
-<div id="login" class="page">
-  <h2>Connexion</h2>
+<!-- HERO -->
+<section class="text-center py-28 relative z-10">
+  <h2 class="text-6xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
+    Protection Anti-Raid Ultime
+  </h2>
 
-  <input id="user" placeholder="Pseudo">
-  <input id="pass" placeholder="Mot de passe" type="password">
+  <p class="text-gray-300 mt-6 max-w-xl mx-auto">
+    Sécurise ton serveur Discord avec RoyalBot — modération, logs et anti-raid automatique.
+  </p>
 
-  <button onclick="login()" style="background:#7c3aed;padding:12px 20px;border-radius:10px;color:white;width:100%;">
-    Se connecter
-  </button>
-</div>
+  <div class="mt-8 flex justify-center gap-4">
+    <a class="bg-purple-600 px-6 py-3 rounded-xl hover:scale-105 transition"
+       href="https://discord.com/oauth2/authorize?client_id=1405970621724098611&permissions=8&scope=bot">
+      Ajouter le bot
+    </a>
 
-<!-- DASH -->
-<div id="dashboard" class="page">
-  <h2 id="dashUser"></h2>
-</div>
+    <a class="border border-purple-500 px-6 py-3 rounded-xl hover:bg-purple-900/40 transition"
+       href="https://discord.gg/fGn9gCyepm">
+      Support
+    </a>
+  </div>
+</section>
 
-<!-- PROFILE -->
-<div id="profile" class="page">
-  <h2 id="profileName"></h2>
+<!-- FEATURES -->
+<section class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 px-10 py-10 relative z-10">
 
-  <button onclick="logout()" style="background:red;padding:10px;border-radius:8px;color:white;">
-    Déconnexion
-  </button>
-</div>
+  <div class="card p-6">
+    🔥 <h3 class="font-bold mt-2">Anti-Raid</h3>
+    <p class="text-gray-400 text-sm mt-2">Protection automatique contre raids et attaques.</p>
+  </div>
 
+  <div class="card p-6">
+    🛡️ <h3 class="font-bold mt-2">Modération</h3>
+    <p class="text-gray-400 text-sm mt-2">Kick, ban, mute en un clic.</p>
+  </div>
+
+  <div class="card p-6">
+    📜 <h3 class="font-bold mt-2">Logs</h3>
+    <p class="text-gray-400 text-sm mt-2">Historique complet des actions.</p>
+  </div>
+
+  <div class="card p-6">
+    ✨ <h3 class="font-bold mt-2">Updates</h3>
+    <p class="text-gray-400 text-sm mt-2">Nouvelles fonctionnalités régulières.</p>
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer class="text-center py-6 text-gray-500 relative z-10">
+  👑 RoyalBot — Secure Discord Servers
+</footer>
+
+<!-- LOGIN SCRIPT -->
 <script>
-let users = JSON.parse(localStorage.getItem("users") || '[{"username":"admin","password":"ADMIN1234"}]');
-let current = null;
+const loginBtn = document.getElementById("loginBtn");
+const userBox = document.getElementById("userBox");
+const username = document.getElementById("username");
+const avatar = document.getElementById("avatar");
 
-function save(){
-  localStorage.setItem("users", JSON.stringify(users));
-  localStorage.setItem("current", JSON.stringify(current));
+// load saved user
+const saved = JSON.parse(localStorage.getItem("royalbot_user"));
+
+function showUser(data) {
+    loginBtn.style.display = "none";
+    userBox.classList.remove("hidden");
+    userBox.classList.add("flex");
+
+    username.innerText = data.username;
+    avatar.src = data.avatar;
 }
 
-function go(page){
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById(page).classList.add("active");
-  updateTop();
+// si déjà connecté
+if (saved) {
+    showUser(saved);
 }
 
-function login(){
-  let u = document.getElementById("user").value;
-  let p = document.getElementById("pass").value;
+// connexion simulée
+loginBtn.addEventListener("click", () => {
 
-  let user = users.find(x => x.username === u && x.password === p);
+    const fakeUser = {
+        username: "GuestUser",
+        avatar: "https://cdn.discordapp.com/embed/avatars/3.png"
+    };
 
-  if(!user){
-    alert("Erreur login");
-    return;
-  }
-
-  current = user;
-  save();
-
-  document.getElementById("dashUser").innerText = "Bienvenue " + u;
-  document.getElementById("profileName").innerText = u;
-
-  go("dashboard");
-}
-
-function logout(){
-  current = null;
-  save();
-  go("home");
-}
-
-function updateTop(){
-  let topbar = document.getElementById("topbar");
-
-  if(current){
-    topbar.innerHTML = `<button onclick="go('profile')" style="background:#4f46e5;padding:8px 12px;border-radius:20px;color:white;">👤 ${current.username}</button>`;
-  } else {
-    topbar.innerHTML = `<button onclick="go('login')" style="border:1px solid #aaa;padding:8px 12px;border-radius:20px;color:white;">Connexion</button>`;
-  }
-}
-
-updateTop();
+    localStorage.setItem("royalbot_user", JSON.stringify(fakeUser));
+    showUser(fakeUser);
+});
 </script>
 
 </body>
